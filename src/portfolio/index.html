@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>Portfolio</h1>
+
+{% if portfolio %}
+<ul class="post-list">
+  {% for item in portfolio %}
+  <li>
+    <span class="date">{{ item.date_iso }}</span>
+    <a href="/{{ item.slug }}.html">{{ item.title }}</a>
+    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p><em>No portfolio items yet.</em></p>
+{% endif %}
+{% endblock %}
