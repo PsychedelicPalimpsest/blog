@@ -5,7 +5,7 @@ description: Unlocking a flash unlock for fun and profit
 ---
 
 ## Some TI hardware primer 
-> <small>_Feel free to skip this one_ </small>
+> <small>_Feel free to skip this section_ </small>
 
 First off, there are many TI-84 varieties, but for this article we are going to be covering the monochrome TI83 and Ti84, those ones are a lot more fun to play with. In these system, they run of a z80 cpu clock at 8Mhz with the ability to go up to 15Mhz, and surrounded in a much of hardware. We can communicate with this hardware with _ports_, like this:
 
