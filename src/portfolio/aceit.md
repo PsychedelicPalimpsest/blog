@@ -1,7 +1,7 @@
 ---
 title: AceIT
 date: 2026-02-22
-description: HACKATHON: An AI interview practice playform.
+description: "HACKATHON: An AI interview practice playform."
 ---
 
 <iframe width="420" height="315"

@@ -1,7 +1,7 @@
 ---
 title: Byckeye-sense
 date: 2026-02-22
-description: HACKATHON: Tracking people with their phones
+description: "HACKATHON: Tracking people with their phones"
 ---
 
 
