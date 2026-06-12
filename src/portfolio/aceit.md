@@ -4,11 +4,7 @@ date: 2026-02-22
 description: "HACKATHON: An AI interview practice playform."
 ---
 
-<iframe width="420" height="315"
-src="https://www.youtube.com/embed/5oSmkfMqiOk">
-</iframe>
-
-[repo](https://github.com/OSU-Hackathon-Team/HackAI2026)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5oSmkfMqiOk?si=5KvRO7YnL34oSVyO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>[repo](https://github.com/OSU-Hackathon-Team/HackAI2026)
 
 
 # Executive Summary
