@@ -33,7 +33,7 @@ BASE_TEMPLATE_NAME = "_base.html"
 def render_markdown_body(text: str) -> str:
     return markdown.markdown(
         text,
-        extensions=["fenced_code", "tables", "toc", "nl2br"],
+        extensions=["fenced_code", "tables", "toc", "nl2br", "codehilite"],
     )
 
 
@@ -85,6 +85,7 @@ def build_context() -> dict:
         "posts": collect_collection(POSTS_DIR),
         "portfolio": collect_collection(PORTFOLIO_DIR),
         "build_time": datetime.now().strftime("%Y-%m-%d %H:%M UTC"),
+        "dev_mode": os.environ.get("BLOG_DEV") == "1",
     }
 
 
@@ -109,10 +110,28 @@ def render_markdown_file(src_path: Path, context: dict) -> str:
     )
 
 
-def main() -> None:
-    if OUT.exists():
-        shutil.rmtree(OUT)
-    OUT.mkdir(parents=True)
+def main(out_dir: Path | None = None, *, atomic: bool = False) -> None:
+    """Build the site.
+
+    When *atomic* is True, the site is built into a temporary directory and
+    atomically swapped into place.  This avoids races between a running dev
+    server and the rebuild.  When False (the default, used in CI) the output
+    directory is cleared with ``rmtree`` before rendering.
+    """
+    target = out_dir or OUT
+    # Ensure the target directory exists initially.
+    target.mkdir(parents=True, exist_ok=True)
+
+    if atomic:
+        work = target.parent / (f".{target.name}.tmp")
+        if work.exists():
+            shutil.rmtree(work)
+        work.mkdir(parents=True, exist_ok=True)
+    else:
+        work = target
+        if work.exists():
+            shutil.rmtree(work)
+        work.mkdir(parents=True, exist_ok=True)
 
     jinja_env = FileSystemLoader(str(SRC))
     jinja_env = jinja2.Environment(
@@ -141,7 +160,7 @@ def main() -> None:
         if src_path.suffix not in {".html", ".md"}:
             continue
 
-        out_path = output_path_for(src_path, SRC, OUT)
+        out_path = output_path_for(src_path, SRC, work)
         out_path.parent.mkdir(parents=True, exist_ok=True)
 
         if src_path.suffix == ".html":
@@ -151,9 +170,22 @@ def main() -> None:
 
         out_path.write_text(rendered, encoding="utf-8")
         written.append(out_path)
-        print(f"  {rel} -> {out_path.relative_to(OUT)}")
+        print(f"  {rel} -> {out_path.relative_to(work)}")
 
-    print(f"\nBuilt {len(written)} page(s) into {OUT.relative_to(ROOT)}/")
+    print(f"\nBuilt {len(written)} page(s) into {work.relative_to(ROOT)}/")
+
+    if not atomic:
+        return
+
+    # Atomic swap: move existing target out of the way, move new work in.
+    old = target.parent / (f".{target.name}.old")
+    if old.exists():
+        shutil.rmtree(old, ignore_errors=True)
+    if target.exists():
+        os.rename(str(target), str(old))
+    os.rename(str(work), str(target))
+    if old.exists():
+        shutil.rmtree(old, ignore_errors=True)
 
 
 if __name__ == "__main__":
