@@ -7,7 +7,7 @@
   {% for item in portfolio %}
   <li>
     <span class="date">{{ item.date_iso }}</span>
-    <a href="/{{ item.slug }}.html">{{ item.title }}</a>
+    <a href="/{{ item.slug }}/">{{ item.title }}</a>
     {% if item.description %}<p>{{ item.description }}</p>{% endif %}
   </li>
   {% endfor %}

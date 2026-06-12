@@ -46,7 +46,11 @@ def output_path_for(src_path: Path, base: Path, out_root: Path) -> Path:
     rel = src_path.relative_to(base)
     if src_path.suffix == ".md":
         rel = rel.with_suffix(".html")
-    return out_root / rel
+    out = out_root / rel
+    # Convert non-index pages to directory-style URLs (about.html -> about/index.html)
+    if out.stem != "index" and out.suffix == ".html":
+        out = out.with_suffix("") / "index.html"
+    return out
 
 
 def collect_collection(directory: Path) -> list[dict]:

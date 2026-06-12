@@ -9,7 +9,7 @@
   {% for post in posts %}
   <li>
     <span class="date">{{ post.date_iso }}</span>
-    <a href="/{{ post.slug }}.html">{{ post.title }}</a>
+    <a href="/{{ post.slug }}/">{{ post.title }}</a>
     {% if post.description %}<p>{{ post.description }}</p>{% endif %}
   </li>
   {% endfor %}
