@@ -1,0 +1,390 @@
+:root {
+  --fg: #1a1a1a;
+  --muted: #666;
+  --bg: #fdfdfd;
+  --accent: #0066cc;
+  --max-width: 42rem;
+  --border: #eee;
+  --table-border: rgba(127,127,127,0.15);
+  --table-header-bg: rgba(127,127,127,0.08);
+  --table-stripe: rgba(127,127,127,0.04);
+  --pre-bg: rgba(127,127,127,0.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #ececec;
+    --muted: #999;
+    --bg: #121212;
+    --accent: #66b3ff;
+    --border: #2a2a2a;
+    --table-border: rgba(255,255,255,0.08);
+    --table-header-bg: rgba(255,255,255,0.05);
+    --table-stripe: rgba(255,255,255,0.03);
+    --pre-bg: rgba(255,255,255,0.05);
+  }
+}
+html[data-theme="dark"] {
+  --fg: #ececec;
+  --muted: #999;
+  --bg: #121212;
+  --accent: #66b3ff;
+  --border: #2a2a2a;
+  --table-border: rgba(255,255,255,0.08);
+  --table-header-bg: rgba(255,255,255,0.05);
+  --table-stripe: rgba(255,255,255,0.03);
+  --pre-bg: rgba(255,255,255,0.05);
+}
+html[data-theme="light"] {
+  --fg: #1a1a1a;
+  --muted: #666;
+  --bg: #fdfdfd;
+  --accent: #0066cc;
+  --border: #eee;
+  --table-border: rgba(127,127,127,0.15);
+  --table-header-bg: rgba(127,127,127,0.08);
+  --table-stripe: rgba(127,127,127,0.04);
+  --pre-bg: rgba(127,127,127,0.10);
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+main, header, footer {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 1.5rem 1.25rem;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+header a { color: var(--fg); text-decoration: none; font-weight: 600; }
+header nav a { color: var(--muted); margin-left: 1rem; font-weight: 400; }
+header nav a:hover, header nav a:focus { color: var(--accent); }
+main { flex: 1; }
+footer {
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.25; }
+h1 { font-size: 1.9rem; margin-top: 0.5rem; }
+h2 { font-size: 1.4rem; margin-top: 2rem; }
+code {
+  background: rgba(127,127,127,0.12);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.92em;
+}
+pre {
+  background: var(--pre-bg);
+  padding: 0.9rem 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  position: relative;
+}
+pre code { background: transparent; padding: 0; }
+
+.code-block { position: relative; }
+.copy-btn {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.5rem;
+  z-index: 1;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75em;
+  font-family: inherit;
+  line-height: 1.4;
+  border: 1px solid rgba(127,127,127,0.25);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.code-block:hover .copy-btn,
+.copy-btn:focus-visible { opacity: 1; }
+.copy-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--muted);
+  transition: color 0.15s, border-color 0.15s;
+  min-width: 2.2rem;
+  min-height: 2.0rem;
+}
+.theme-toggle:hover {
+  color: var(--fg);
+  border-color: var(--muted);
+}
+
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.95em;
+}
+th, td {
+  padding: 0.55rem 0.9rem;
+  text-align: left;
+  border: 1px solid var(--table-border);
+}
+thead:not(:has(th:not(:empty))) { display: none; }
+th {
+  background: var(--table-header-bg);
+  font-weight: 600;
+}
+tr:nth-child(even) td {
+  background: var(--table-stripe);
+}
+.post-list { list-style: none; padding: 0; }
+.post-list li {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+.post-list .date {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.post-list a {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.post-list a:hover { text-decoration: underline; }
+.post-list p { margin: 0.2rem 0 0; color: var(--muted); }
+
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
+.codehilite .c { color: #3D7B7B; font-style: italic }
+.codehilite .k { color: #008000; font-weight: bold }
+.codehilite .o { color: #666 }
+.codehilite .ch { color: #3D7B7B; font-style: italic }
+.codehilite .cm { color: #3D7B7B; font-style: italic }
+.codehilite .cp { color: #9C6500 }
+.codehilite .cpf { color: #3D7B7B; font-style: italic }
+.codehilite .c1 { color: #3D7B7B; font-style: italic }
+.codehilite .cs { color: #3D7B7B; font-style: italic }
+.codehilite .gd { color: #A00000 }
+.codehilite .ge { font-style: italic }
+.codehilite .gr { color: #E40000 }
+.codehilite .gh { color: #000080; font-weight: bold }
+.codehilite .gi { color: #008400 }
+.codehilite .go { color: #717171 }
+.codehilite .gp { color: #000080; font-weight: bold }
+.codehilite .gs { font-weight: bold }
+.codehilite .gu { color: #800080; font-weight: bold }
+.codehilite .gt { color: #04D }
+.codehilite .kc { color: #008000; font-weight: bold }
+.codehilite .kd { color: #008000; font-weight: bold }
+.codehilite .kn { color: #008000; font-weight: bold }
+.codehilite .kp { color: #008000 }
+.codehilite .kr { color: #008000; font-weight: bold }
+.codehilite .kt { color: #B00040 }
+.codehilite .m { color: #666 }
+.codehilite .s { color: #BA2121 }
+.codehilite .na { color: #687822 }
+.codehilite .nb { color: #008000 }
+.codehilite .nc { color: #00F; font-weight: bold }
+.codehilite .no { color: #800 }
+.codehilite .nd { color: #A2F }
+.codehilite .ni { color: #717171; font-weight: bold }
+.codehilite .ne { color: #CB3F38; font-weight: bold }
+.codehilite .nf { color: #00F }
+.codehilite .nl { color: #767600 }
+.codehilite .nn { color: #00F; font-weight: bold }
+.codehilite .nt { color: #008000; font-weight: bold }
+.codehilite .nv { color: #19177C }
+.codehilite .ow { color: #A2F; font-weight: bold }
+.codehilite .w { color: #BBB }
+.codehilite .mb { color: #666 }
+.codehilite .mf { color: #666 }
+.codehilite .mh { color: #666 }
+.codehilite .mi { color: #666 }
+.codehilite .mo { color: #666 }
+.codehilite .sa { color: #BA2121 }
+.codehilite .sb { color: #BA2121 }
+.codehilite .sc { color: #BA2121 }
+.codehilite .dl { color: #BA2121 }
+.codehilite .sd { color: #BA2121; font-style: italic }
+.codehilite .s2 { color: #BA2121 }
+.codehilite .se { color: #AA5D1F; font-weight: bold }
+.codehilite .sh { color: #BA2121 }
+.codehilite .si { color: #A45A77; font-weight: bold }
+.codehilite .sx { color: #008000 }
+.codehilite .sr { color: #A45A77 }
+.codehilite .s1 { color: #BA2121 }
+.codehilite .ss { color: #19177C }
+.codehilite .bp { color: #008000 }
+.codehilite .fm { color: #00F }
+.codehilite .vc { color: #19177C }
+.codehilite .vg { color: #19177C }
+.codehilite .vi { color: #19177C }
+.codehilite .vm { color: #19177C }
+.codehilite .il { color: #666 }
+@media (prefers-color-scheme: dark) {
+  .codehilite { background: #1e1e1e; }
+  .codehilite .c, .codehilite .c1, .codehilite .cm, .codehilite .cs,
+  .codehilite .ch, .codehilite .cpf { color: #6a9955; font-style: italic }
+  .codehilite .k, .codehilite .kc, .codehilite .kd, .codehilite .kn,
+  .codehilite .kr, .codehilite .kt, .codehilite .no { color: #569cd6 }
+  .codehilite .s, .codehilite .s1, .codehilite .s2, .codehilite .sb,
+  .codehilite .sc, .codehilite .sh, .codehilite .sa, .codehilite .dl { color: #ce9178 }
+  .codehilite .m, .codehilite .mi, .codehilite .mf, .codehilite .mh,
+  .codehilite .mo, .codehilite .mb, .codehilite .il { color: #b5cea8 }
+  .codehilite .nc, .codehilite .nf, .codehilite .nn, .codehilite .nb,
+  .codehilite .bp, .codehilite .fm { color: #dcdcaa }
+  .codehilite .nt { color: #569cd6 }
+  .codehilite .nv, .codehilite .vc, .codehilite .vg, .codehilite .vi,
+  .codehilite .vm { color: #9cdcfe }
+  .codehilite .ne { color: #f44747 }
+  .codehilite .gh { color: #dcdcaa }
+  .codehilite .gp { color: #569cd6 }
+  .codehilite .go { color: #808080 }
+  .codehilite .w { color: #808080 }
+}
+html[data-theme="dark"] .codehilite { background: #1e1e1e; }
+html[data-theme="dark"] .codehilite .c,
+html[data-theme="dark"] .codehilite .c1,
+html[data-theme="dark"] .codehilite .cm,
+html[data-theme="dark"] .codehilite .cs,
+html[data-theme="dark"] .codehilite .ch,
+html[data-theme="dark"] .codehilite .cpf { color: #6a9955; font-style: italic }
+html[data-theme="dark"] .codehilite .k,
+html[data-theme="dark"] .codehilite .kc,
+html[data-theme="dark"] .codehilite .kd,
+html[data-theme="dark"] .codehilite .kn,
+html[data-theme="dark"] .codehilite .kr,
+html[data-theme="dark"] .codehilite .kt,
+html[data-theme="dark"] .codehilite .no { color: #569cd6 }
+html[data-theme="dark"] .codehilite .s,
+html[data-theme="dark"] .codehilite .s1,
+html[data-theme="dark"] .codehilite .s2,
+html[data-theme="dark"] .codehilite .sb,
+html[data-theme="dark"] .codehilite .sc,
+html[data-theme="dark"] .codehilite .sh,
+html[data-theme="dark"] .codehilite .sa,
+html[data-theme="dark"] .codehilite .dl { color: #ce9178 }
+html[data-theme="dark"] .codehilite .m,
+html[data-theme="dark"] .codehilite .mi,
+html[data-theme="dark"] .codehilite .mf,
+html[data-theme="dark"] .codehilite .mh,
+html[data-theme="dark"] .codehilite .mo,
+html[data-theme="dark"] .codehilite .mb,
+html[data-theme="dark"] .codehilite .il { color: #b5cea8 }
+html[data-theme="dark"] .codehilite .nc,
+html[data-theme="dark"] .codehilite .nf,
+html[data-theme="dark"] .codehilite .nn,
+html[data-theme="dark"] .codehilite .nb,
+html[data-theme="dark"] .codehilite .bp,
+html[data-theme="dark"] .codehilite .fm { color: #dcdcaa }
+html[data-theme="dark"] .codehilite .nt { color: #569cd6 }
+html[data-theme="dark"] .codehilite .nv,
+html[data-theme="dark"] .codehilite .vc,
+html[data-theme="dark"] .codehilite .vg,
+html[data-theme="dark"] .codehilite .vi,
+html[data-theme="dark"] .codehilite .vm { color: #9cdcfe }
+html[data-theme="dark"] .codehilite .ne { color: #f44747 }
+html[data-theme="dark"] .codehilite .gh { color: #dcdcaa }
+html[data-theme="dark"] .codehilite .gp { color: #569cd6 }
+html[data-theme="dark"] .codehilite .go { color: #808080 }
+html[data-theme="dark"] .codehilite .w { color: #808080 }
+
+html[data-theme="light"] .codehilite { background: #f8f8f8; }
+html[data-theme="light"] .codehilite .c,
+html[data-theme="light"] .codehilite .c1,
+html[data-theme="light"] .codehilite .cm,
+html[data-theme="light"] .codehilite .cs,
+html[data-theme="light"] .codehilite .ch,
+html[data-theme="light"] .codehilite .cpf { color: #3D7B7B; font-style: italic }
+html[data-theme="light"] .codehilite .k,
+html[data-theme="light"] .codehilite .kc,
+html[data-theme="light"] .codehilite .kd,
+html[data-theme="light"] .codehilite .kn,
+html[data-theme="light"] .codehilite .kr { color: #008000; font-weight: bold }
+html[data-theme="light"] .codehilite .kt { color: #B00040 }
+html[data-theme="light"] .codehilite .s,
+html[data-theme="light"] .codehilite .s1,
+html[data-theme="light"] .codehilite .s2,
+html[data-theme="light"] .codehilite .sb,
+html[data-theme="light"] .codehilite .sc,
+html[data-theme="light"] .codehilite .sh,
+html[data-theme="light"] .codehilite .sa,
+html[data-theme="light"] .codehilite .dl { color: #BA2121 }
+html[data-theme="light"] .codehilite .m,
+html[data-theme="light"] .codehilite .mi,
+html[data-theme="light"] .codehilite .mf,
+html[data-theme="light"] .codehilite .mh,
+html[data-theme="light"] .codehilite .mo,
+html[data-theme="light"] .codehilite .mb,
+html[data-theme="light"] .codehilite .il { color: #666 }
+html[data-theme="light"] .codehilite .nc,
+html[data-theme="light"] .codehilite .nf,
+html[data-theme="light"] .codehilite .nn,
+html[data-theme="light"] .codehilite .fm { color: #00F }
+html[data-theme="light"] .codehilite .nb,
+html[data-theme="light"] .codehilite .bp { color: #008000 }
+html[data-theme="light"] .codehilite .nt { color: #008000; font-weight: bold }
+html[data-theme="light"] .codehilite .nv,
+html[data-theme="light"] .codehilite .vc,
+html[data-theme="light"] .codehilite .vg,
+html[data-theme="light"] .codehilite .vi,
+html[data-theme="light"] .codehilite .vm { color: #19177C }
+html[data-theme="light"] .codehilite .ne { color: #CB3F38; font-weight: bold }
+html[data-theme="light"] .codehilite .gh,
+html[data-theme="light"] .codehilite .gp { color: #000080; font-weight: bold }
+html[data-theme="light"] .codehilite .go { color: #717171 }
+html[data-theme="light"] .codehilite .w { color: #BBB }
+html[data-theme="light"] .codehilite .no { color: #800 }
+html[data-theme="light"] .codehilite .nd { color: #A2F }
+html[data-theme="light"] .codehilite .ni { color: #717171; font-weight: bold }
+html[data-theme="light"] .codehilite .ow { color: #A2F; font-weight: bold }
+html[data-theme="light"] .codehilite .cp { color: #9C6500 }
+html[data-theme="light"] .codehilite .gd { color: #A00000 }
+html[data-theme="light"] .codehilite .gi { color: #008400 }
+html[data-theme="light"] .codehilite .gu { color: #800080; font-weight: bold }
+html[data-theme="light"] .codehilite .gs { font-weight: bold }
+html[data-theme="light"] .codehilite .ge { font-style: italic }
+html[data-theme="light"] .codehilite .gr { color: #E40000 }
+html[data-theme="light"] .codehilite .gt { color: #04D }
+html[data-theme="light"] .codehilite .na { color: #687822 }
+html[data-theme="light"] .codehilite .nl { color: #767600 }
+html[data-theme="light"] .codehilite .se { color: #AA5D1F; font-weight: bold }
+html[data-theme="light"] .codehilite .si { color: #A45A77; font-weight: bold }
+html[data-theme="light"] .codehilite .sx { color: #008000 }
+html[data-theme="light"] .codehilite .sr { color: #A45A77 }
+html[data-theme="light"] .codehilite .ss { color: #19177C }
+html[data-theme="light"] .codehilite .sd { color: #BA2121; font-style: italic }
+html[data-theme="light"] .codehilite .o { color: #666 }

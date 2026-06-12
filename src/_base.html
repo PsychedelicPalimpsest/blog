@@ -5,221 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ page.title if page else site_title }}{% endblock %}</title>
   <meta name="description" content="{{ page.description if page and page.description else site_description }}">
-  <style>
-    :root {
-      --fg: #1a1a1a;
-      --muted: #666;
-      --bg: #fdfdfd;
-      --accent: #0066cc;
-      --max-width: 42rem;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --fg: #ececec;
-        --muted: #999;
-        --bg: #121212;
-        --accent: #66b3ff;
-      }
-    }
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                   "Helvetica Neue", Arial, sans-serif;
-      font-size: 17px;
-      line-height: 1.6;
-    }
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    main, header, footer {
-      width: 100%;
-      max-width: var(--max-width);
-      padding: 1.5rem 1.25rem;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      flex-wrap: wrap;
-      border-bottom: 1px solid #eee;
-    }
-    @media (prefers-color-scheme: dark) {
-      header { border-bottom-color: #2a2a2a; }
-    }
-    header a { color: var(--fg); text-decoration: none; font-weight: 600; }
-    header nav a { color: var(--muted); margin-left: 1rem; font-weight: 400; }
-    header nav a:hover, header nav a:focus { color: var(--accent); }
-    main { flex: 1; }
-    footer {
-      color: var(--muted);
-      font-size: 0.85rem;
-      border-top: 1px solid #eee;
-      text-align: center;
-    }
-    @media (prefers-color-scheme: dark) {
-      footer { border-top-color: #2a2a2a; }
-    }
-    a { color: var(--accent); }
-    h1, h2, h3 { line-height: 1.25; }
-    h1 { font-size: 1.9rem; margin-top: 0.5rem; }
-    h2 { font-size: 1.4rem; margin-top: 2rem; }
-    code {
-      background: rgba(127,127,127,0.12);
-      padding: 0.1em 0.35em;
-      border-radius: 3px;
-      font-size: 0.92em;
-    }
-    pre {
-      background: rgba(127,127,127,0.10);
-      padding: 0.9rem 1rem;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
-    pre code { background: transparent; padding: 0; }
-    hr { border: none; border-top: 1px solid #eee; margin: 2rem 0; }
-    @media (prefers-color-scheme: dark) {
-      hr { border-top-color: #2a2a2a; }
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.25rem 0;
-      font-size: 0.95em;
-    }
-    th, td {
-      padding: 0.55rem 0.9rem;
-      text-align: left;
-      border: 1px solid rgba(127,127,127,0.15);
-    }
-    thead:has(th:empty) { display: none; }  /* hide header when all blank */
-    th {
-      background: rgba(127,127,127,0.08);
-      font-weight: 600;
-    }
-    tr:nth-child(even) td {
-      background: rgba(127,127,127,0.04);
-    }
-    @media (prefers-color-scheme: dark) {
-      th, td { border-color: rgba(255,255,255,0.08); }
-      th { background: rgba(255,255,255,0.05); }
-      tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
-    }
-    .post-list { list-style: none; padding: 0; }
-    .post-list li {
-      margin-bottom: 1.25rem;
-      display: flex;
-      flex-direction: column;
-    }
-    .post-list .date {
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-    .post-list a {
-      font-size: 1.1rem;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .post-list a:hover { text-decoration: underline; }
-    .post-list p { margin: 0.2rem 0 0; color: var(--muted); }
-
-    /* codehilite (pygments default) */
-    .codehilite .hll { background-color: #ffffcc }
-    .codehilite { background: #f8f8f8; }
-    .codehilite .c { color: #3D7B7B; font-style: italic }
-    .codehilite .k { color: #008000; font-weight: bold }
-    .codehilite .o { color: #666 }
-    .codehilite .ch { color: #3D7B7B; font-style: italic }
-    .codehilite .cm { color: #3D7B7B; font-style: italic }
-    .codehilite .cp { color: #9C6500 }
-    .codehilite .cpf { color: #3D7B7B; font-style: italic }
-    .codehilite .c1 { color: #3D7B7B; font-style: italic }
-    .codehilite .cs { color: #3D7B7B; font-style: italic }
-    .codehilite .gd { color: #A00000 }
-    .codehilite .ge { font-style: italic }
-    .codehilite .gr { color: #E40000 }
-    .codehilite .gh { color: #000080; font-weight: bold }
-    .codehilite .gi { color: #008400 }
-    .codehilite .go { color: #717171 }
-    .codehilite .gp { color: #000080; font-weight: bold }
-    .codehilite .gs { font-weight: bold }
-    .codehilite .gu { color: #800080; font-weight: bold }
-    .codehilite .gt { color: #04D }
-    .codehilite .kc { color: #008000; font-weight: bold }
-    .codehilite .kd { color: #008000; font-weight: bold }
-    .codehilite .kn { color: #008000; font-weight: bold }
-    .codehilite .kp { color: #008000 }
-    .codehilite .kr { color: #008000; font-weight: bold }
-    .codehilite .kt { color: #B00040 }
-    .codehilite .m { color: #666 }
-    .codehilite .s { color: #BA2121 }
-    .codehilite .na { color: #687822 }
-    .codehilite .nb { color: #008000 }
-    .codehilite .nc { color: #00F; font-weight: bold }
-    .codehilite .no { color: #800 }
-    .codehilite .nd { color: #A2F }
-    .codehilite .ni { color: #717171; font-weight: bold }
-    .codehilite .ne { color: #CB3F38; font-weight: bold }
-    .codehilite .nf { color: #00F }
-    .codehilite .nl { color: #767600 }
-    .codehilite .nn { color: #00F; font-weight: bold }
-    .codehilite .nt { color: #008000; font-weight: bold }
-    .codehilite .nv { color: #19177C }
-    .codehilite .ow { color: #A2F; font-weight: bold }
-    .codehilite .w { color: #BBB }
-    .codehilite .mb { color: #666 }
-    .codehilite .mf { color: #666 }
-    .codehilite .mh { color: #666 }
-    .codehilite .mi { color: #666 }
-    .codehilite .mo { color: #666 }
-    .codehilite .sa { color: #BA2121 }
-    .codehilite .sb { color: #BA2121 }
-    .codehilite .sc { color: #BA2121 }
-    .codehilite .dl { color: #BA2121 }
-    .codehilite .sd { color: #BA2121; font-style: italic }
-    .codehilite .s2 { color: #BA2121 }
-    .codehilite .se { color: #AA5D1F; font-weight: bold }
-    .codehilite .sh { color: #BA2121 }
-    .codehilite .si { color: #A45A77; font-weight: bold }
-    .codehilite .sx { color: #008000 }
-    .codehilite .sr { color: #A45A77 }
-    .codehilite .s1 { color: #BA2121 }
-    .codehilite .ss { color: #19177C }
-    .codehilite .bp { color: #008000 }
-    .codehilite .fm { color: #00F }
-    .codehilite .vc { color: #19177C }
-    .codehilite .vg { color: #19177C }
-    .codehilite .vi { color: #19177C }
-    .codehilite .vm { color: #19177C }
-    @media (prefers-color-scheme: dark) {
-      .codehilite { background: #1e1e1e; }
-      .codehilite .c, .codehilite .c1, .codehilite .cm, .codehilite .cs,
-      .codehilite .ch, .codehilite .cpf { color: #6a9955; font-style: italic }
-      .codehilite .k, .codehilite .kc, .codehilite .kd, .codehilite .kn,
-      .codehilite .kr, .codehilite .kt, .codehilite .no { color: #569cd6 }
-      .codehilite .s, .codehilite .s1, .codehilite .s2, .codehilite .sb,
-      .codehilite .sc, .codehilite .sh, .codehilite .sa, .codehilite .dl { color: #ce9178 }
-      .codehilite .m, .codehilite .mi, .codehilite .mf, .codehilite .mh,
-      .codehilite .mo, .codehilite .mb, .codehilite .il { color: #b5cea8 }
-      .codehilite .nc, .codehilite .nf, .codehilite .nn, .codehilite .nb,
-      .codehilite .bp, .codehilite .fm { color: #dcdcaa }
-      .codehilite .nt { color: #569cd6 }
-      .codehilite .nv, .codehilite .vc, .codehilite .vg, .codehilite .vi,
-      .codehilite .vm { color: #9cdcfe }
-      .codehilite .ne { color: #f44747 }
-      .codehilite .gh { color: #dcdcaa }
-      .codehilite .gp { color: #569cd6 }
-      .codehilite .go { color: #808080 }
-      .codehilite .w { color: #808080 }
-    }
-  </style>
+  <link rel="stylesheet" href="/site.css">
+  <script>
+    /* apply saved theme before paint to avoid flash */
+    (function () {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 </head>
 <body>
   <header>
@@ -228,6 +21,7 @@
       <a href="/">Home</a>
       <a href="/portfolio/">Portfolio</a>
       <a href="/about/">About</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">&#9788;</button>
     </nav>
   </header>
 
@@ -253,5 +47,94 @@
     })();
   </script>
   {% endif %}
+
+  <script>
+    (function () {
+      var pres = document.querySelectorAll('pre');
+      for (var i = 0; i < pres.length; i++) {
+        (function (pre) {
+          if (pre.parentNode.classList.contains('code-block')) return;
+
+          var wrapper = document.createElement('div');
+          wrapper.className = 'code-block';
+
+          var btn = document.createElement('button');
+          btn.className = 'copy-btn';
+          btn.textContent = 'Copy';
+          btn.setAttribute('aria-label', 'Copy code to clipboard');
+
+          btn.onclick = function () {
+            var text = pre.textContent || pre.innerText || '';
+            var done = function () {
+              btn.textContent = 'Copied!';
+              setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+            };
+            var copy = navigator.clipboard && navigator.clipboard.writeText;
+            if (copy) {
+              navigator.clipboard.writeText(text).then(done, function () {
+                fallback(text, btn, done);
+              });
+            } else {
+              fallback(text, btn, done);
+            }
+          };
+
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(btn);
+          wrapper.appendChild(pre);
+        })(pres[i]);
+      }
+
+      function fallback(text, btn, done) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var html = document.documentElement;
+      var current = html.getAttribute('data-theme') || 'auto';
+
+      function setIcon(mode) {
+        btn.innerHTML = mode === 'dark' ? '&#9789;' : '&#9788;';
+        btn.title = 'Theme: ' + mode + ' (click to cycle dark / light / auto)';
+      }
+      setIcon(current);
+
+      function apply(mode) {
+        if (mode === 'auto') {
+          html.removeAttribute('data-theme');
+          localStorage.removeItem('theme');
+          setIcon(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        } else {
+          html.setAttribute('data-theme', mode);
+          localStorage.setItem('theme', mode);
+          setIcon(mode);
+        }
+      }
+
+      btn.onclick = function () {
+        var cur = html.getAttribute('data-theme');
+        if (!cur) cur = 'auto';
+        var next = cur === 'auto' ? 'dark' : cur === 'dark' ? 'light' : 'auto';
+        apply(next);
+      };
+
+      /* keep icon in sync if OS preference changes while in auto mode */
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!html.getAttribute('data-theme')) setIcon(e.matches ? 'dark' : 'light');
+      });
+    })();
+  </script>
 </body>
 </html>

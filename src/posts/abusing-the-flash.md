@@ -78,11 +78,11 @@ Yup, second page of google, quite convenient!
 
 ## Steal all the ram!
 
-This is what most people are here for. You see, in the old days calculators had a 8 ram paged, 5 of which were unused by the operating system, a whopping 80KB of unused space, but, then TI attacked. Starting in ASIC version $55 <sup>[[1]](https://www.cemetech.net/projects/uti/viewtopic.php?t=8913&postdays=0&postorder=asc&start=0&sid=c835d231a96b736e20d54b0c6328dc44) [[2]](https://www.omnimaga.org/other-calculator-discussion-and-news/the-missing-84-extra-ram-pages-(hardware-change)/)</sup>, all the unused ones were locked away, leaving us with:
+This is what most people are here for. You see, in the old days calculators had a 8 ram pages, 5 of which were unused by the operating system, a whopping 80KB of unused space, but, then TI attacked. Starting in ASIC version $55 <sup>[[1]](https://www.cemetech.net/projects/uti/viewtopic.php?t=8913&postdays=0&postorder=asc&start=0&sid=c835d231a96b736e20d54b0c6328dc44) [[2]](https://www.omnimaga.org/other-calculator-discussion-and-news/the-missing-84-extra-ram-pages-(hardware-change)/)</sup>, all the unused ones were locked away, leaving us with:
 
 |Ram page||
 |--|--|
-|$80| The default C000h ram page, no code execution allowed. Used by the OS as user variable overflow from 8000h|
+|$80| The default C000h ram page, no code execution allowed. Used by the OS as user variable overflow from 8000h, and where ram programs live|
 |$81| The default 8000h ram page, code execution allowed, but mostly used up by the OS|
 |$83| Almost entirly unused (apart from the equation history), and we can execute code!|
 
@@ -98,25 +98,81 @@ But the question is, where do we stash it? There are a few options:
 Yeah, the OS has _swap sector_ built in for temporary usage, and we can ask the OS for it specifically with [FindSwapSector](https://wikiti.brandonw.net/index.php?title=83Plus:BCALLs:5095). But what are the cons, well this routine is kind of dangerous (up to TIs typical quality standards). These are some of the ways is can ruin your day:
 
 1. In a worse case scenario, it defaults to page 8 **EVEN IF SOMETHING IS THERE**, causing possible variable corruption
-2. If you fail to mark the sector as swap (by writing $FE to the first byte of the sector), it has a habbit of overwriting your app pages. As such, uninstalling random apps for the fun of it
+2. If you fail to mark the sector as swap (by writing $FE to the first byte of the sector), it has a habit of overwriting your app pages. As such, uninstalling random apps for the fun of it
 
 ***So I will leave you with one warning***: For the love of GOD, set the first byte $FE
 
-But lets get into the meat and potatos! You want 32KB of ram right???? The answer is simple, use page $83, and then back up all the users variables in $81 (aka the typical 8000h ram page). 
+But lets get into the meat and potatos! You want 32KB of ram right???? The answer is simple, use page $83, and then back up all the users variables from $81 (aka the typical 8000h ram page). 
+
+<sub>*This method only works for flash apps, but simply swap out the regular 4000h with ram page $83, and then back up $80 (the $C000) page, and you get all the benefits (note: remember to update the code bellow)*</sub>
+
 
 
 
 ```asm
+
+; Save page $81 to the swap page
     call flashunlock
+        ld a, $FE     ; Mark page as swap (prevent flash leaks)
+        ld ($8000), a
+
         bcall _FindSwapSector
 
+        push af ; Store the page for later
+        push af
+            bcall _EraseFlashPage ; Remove the last contents
+        pop af
 
+        ld hl, $8000 ; Src  (page $81, assumed to already be at $8000)
+        ld de, $4000 ; Dst (always based at $4000)
+        ld bc, $4000 ; Size (You could optimize this)
+        bcall _WriteFlash   ; Note: This is quite slow (a few secs)
     call flashlock
+
+    
+    pop af ; Get back the flash page
+
+
+    ... ; You probably want to do this in your program cleanup code 
+        ; Just remember to save that flash page in 'a' somewhere
+        ; and retrieve it before here!
+
+
+
+    out ($7), a  ; This maps $8000 to the restore page. 
+                 ; Please note: This is written for apps! Since asm programs
+                 ; live in the $8000 this page, none of this will work!
+
+    ld a, 1      ; Set the $C000 page to the ram page $81, this means the stack
+    out ($5), a  ; is not going to work until it is restored!
+    
+    ld hl, $8000 ; Src
+    ld de, $C000 ; Dst
+    ld bc, $4000 ; Size
+    ldir
+    
+
+    ld a, $81   ; Restore regular $8000 page
+    out (7), a 
+    xor a      ; Restore regular $C000 page
+    out (5), a
+
 ```
 
 
+## Overwriting the operating system
 
 
+> **👹👹👹👹 WARNING  👹👹👹👹**
+> Never do this on a real calculator! Play in an emulator, delete the 8xk/8xp, and let that be it. This section describes many a way to brick you calculator! You have been warned.
+> **HERE BE DRAGONS**
+
+Lets get out of the realm of useful, and do some magic! After the OS is installed, TI assumes it is impossible to modify, as such they never reverify the OS. 
+
+There are a few bytes that signal to the OS that is has already been verified, so just make sure not to override $0055–$0056, these are set to $A55A after verification [[3]](https://wikiti.brandonw.net/index.php?title=83Plus:Boot-Code_Required_Values). (I suppose you could use this to prank your friends, just requires them to reinstall the os)
+
+
+**TODO: FINISH** 
 
 
 

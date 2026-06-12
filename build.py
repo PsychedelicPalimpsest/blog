@@ -158,6 +158,14 @@ def main(out_dir: Path | None = None, *, atomic: bool = False) -> None:
             # treat as partial, skip
             continue
         if src_path.suffix not in {".html", ".md"}:
+            if src_path == SRC / "site.yaml":
+                continue  # site config, not an output asset
+            # Copy static assets (images, css, etc.) verbatim.
+            out_path = output_path_for(src_path, SRC, work)
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src_path, out_path)
+            written.append(out_path)
+            print(f"  {rel} -> {out_path.relative_to(work)}")
             continue
 
         out_path = output_path_for(src_path, SRC, work)
