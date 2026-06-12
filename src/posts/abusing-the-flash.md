@@ -1,7 +1,7 @@
 ---
 title: Becoming GOD on the TI-84
 date: 2026-06-11
-description: Unlocking a flash unlock for fun and profit
+description: Unlocking the flash for fun and profit
 ---
 
 ## Some TI hardware primer 
