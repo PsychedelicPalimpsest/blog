@@ -13,4 +13,4 @@ Here, I wrote out:
 * A binary pathing trick that allow code on one bank to call another bank. 
 * And a codegen component that adds an interface for banked functions.
 
-PR: [link](https://github.com/z88dk/z88dk/pull/2454)
+PR: [link](https://github.com/z88dk/z88dk/pull/2433)
