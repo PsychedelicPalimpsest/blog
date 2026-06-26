@@ -171,8 +171,7 @@ Lets get out of the realm of useful, and do some magic! After the OS is installe
 
 There are a few bytes that signal to the OS that is has already been verified, so just make sure not to override $0055–$0056, these are set to $A55A after verification [[3]](https://wikiti.brandonw.net/index.php?title=83Plus:Boot-Code_Required_Values). (I suppose you could use this to prank your friends, just requires them to reinstall the os)
 
-
-**TODO: FINISH** 
+**REDACTED FOR REASONS**
 
 
 
