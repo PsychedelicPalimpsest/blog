@@ -7,7 +7,6 @@ description: "A scripting tool for Minecraft"
 ![](https://avatars.githubusercontent.com/u/210643394)
 [Github Org](https://github.com/McPuppeteer)
 
-## Overview
 
 The McPuppeteer project is a two-repo toolkit that turns a Minecraft Java Edition
 client into a remotely scriptable "bot." A Fabric mod (`McPuppeteer`) opens a
